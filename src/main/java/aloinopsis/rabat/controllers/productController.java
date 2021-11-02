@@ -1,5 +1,6 @@
 package aloinopsis.rabat.controllers;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,11 +32,11 @@ public class productController {
     public ResponseEntity<String> getProduct(@PathVariable("id") Integer id) {
         if (id > products.size() || id < 1) {
             return ResponseEntity
-                    .status(404)
+                    .status(HttpStatus.NOT_FOUND)
                     .body("Produkt nie odnaleziony");
         }
         return ResponseEntity
-                .status(200)
+                .status(HttpStatus.OK)
                 .body(products.get(id - 1));
     }
 }
