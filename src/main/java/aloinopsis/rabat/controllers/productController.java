@@ -1,6 +1,7 @@
 package aloinopsis.rabat.controllers;
 
 import aloinopsis.rabat.exceptions.ProductNotFoundException;
+import aloinopsis.rabat.models.Product;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,26 +14,25 @@ import java.util.List;
 @RequestMapping("product")
 public class productController {
 
-    private List<String> products = new ArrayList<>();
+    private List<Product> products = new ArrayList<>();
 
     productController() {
-        products.add("Buty");
-        products.add("spodnie");
-        products.add("kurtki");
-        products.add("czapki");
+        products.add(new Product(1L,"Buty"));
+        products.add(new Product(2L,"spodnie"));
+        products.add(new Product(4L,"kurtki"));
+        products.add(new Product(7L,"czapki"));
     }
 
     @GetMapping
-    public List<String> getProducts(){
+    public List<Product> getProducts(){
         return products;
     }
 
     @GetMapping("{id}")
-    public String getProduct(@PathVariable Integer id) {
-        if (id > products.size() || id < 1) {
-            throw new ProductNotFoundException();
-        }
-
-        return products.get(id - 1);
+    public Product getProduct(@PathVariable Long id) {
+        return products.stream()
+                .filter(product -> product.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new ProductNotFoundException());
     }
 }
