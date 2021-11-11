@@ -1,38 +1,41 @@
 package aloinopsis.rabat.controllers;
 
-import aloinopsis.rabat.exceptions.ProductNotFoundException;
 import aloinopsis.rabat.models.Product;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import aloinopsis.rabat.services.ProductService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("product")
 public class productController {
 
-    private List<Product> products = new ArrayList<>();
-
-    productController() {
-        products.add(new Product(1L,"Buty"));
-        products.add(new Product(2L,"spodnie"));
-        products.add(new Product(4L,"kurtki"));
-        products.add(new Product(7L,"czapki"));
-    }
+    final ProductService productService;
 
     @GetMapping
     public List<Product> getProducts(){
-        return products;
+        return productService.getProducts();
     }
 
     @GetMapping("{id}")
     public Product getProduct(@PathVariable Long id) {
-        return products.stream()
-                .filter(product -> product.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new ProductNotFoundException());
+        return productService.getProduct(id);
+    }
+
+    @PostMapping
+    public Product createProduct(@RequestBody Product product) {
+        return productService.createProduct(product);
+    }
+
+    @PutMapping("{id}")
+    public Product updateProduct(@PathVariable Long id, @RequestBody Product productToSave) {
+        return productService.updateProduct(id, productToSave);
+    }
+
+    @DeleteMapping ("{id}")
+    public Product delProduct(@PathVariable Long id) {
+        return productService.delProduct(id);
     }
 }

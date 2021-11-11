@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(
         code = HttpStatus.NOT_FOUND,
-        reason = "Użytkownik nie odnaleziony"
+        reason = "Produkt nie odnaleziony"
 )
 
 public class ProductNotFoundException extends RuntimeException{
